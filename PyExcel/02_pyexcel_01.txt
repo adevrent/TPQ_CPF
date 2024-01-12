@@ -1,0 +1,326 @@
+   1: import xlwings as xw
+   2: wb = xw.Book()
+   3: wb
+<Book [Book1]>
+   4: sht = wb.sheets.active
+   5: sht
+<Sheet [Book1]Sheet1>
+   6: sht.range('A1')
+<Range [Book1]Sheet1!$A$1>
+   7: sht.range('A1:A3')
+<Range [Book1]Sheet1!$A$1:$A$3>
+   8: sht.range('A1:C1')
+<Range [Book1]Sheet1!$A$1:$C$1>
+   9: sht.range('A1:C3')
+<Range [Book1]Sheet1!$A$1:$C$3>
+  10: sht.range('A1').value = 'Python.'
+  11: a = 5
+  12: a
+5
+  13: sht.range('A1').value
+'Python.'
+  14: sht.range('A1').value = 10
+  15: sht.range('A1').value
+10.0
+  16: int(sht.range('A1').value)
+10
+  17: cell = sht.range('A1')
+  18: cell.value
+10.0
+  19: cell.clear()
+  20: cell.value = 1.2345
+  21: cell.value
+1.2345
+  22: sht['A1']
+<Range [Book1]Sheet1!$A$1>
+  23: sht['A1'].value
+1.2345
+  24: sht['A1'].value = 2.345
+  25: l = list(range(7))
+  26: l
+[0, 1, 2, 3, 4, 5, 6]
+  27: sht['A1'] = l
+  28: sht['A1'].value = l
+  29: sht['A1'].value
+0.0
+  30: sht['A2'].value
+  31: sht['B1'].value
+1.0
+  32: sht['B2'].value
+  33: sht['C1'].value
+2.0
+  34: sht['A1'].expand().value
+[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+  35: sht['A1:C1'].value
+[0.0, 1.0, 2.0]
+  36: sht['A1:G1'].value
+[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+  37: t = tuple(l)
+  38: t
+(0, 1, 2, 3, 4, 5, 6)
+  39: sht['A1'].value = t
+  40: sht['A1:G1'].clear()
+  41: sht['A1'].options(transpose=True).value = l
+  42: l
+[0, 1, 2, 3, 4, 5, 6]
+  43: l2 = sht['A1'].expand().value
+  44: l2
+[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+  45: sht = wb.sheets.add()
+  46: sht
+<Sheet [Book1]Sheet2>
+  47: d = {'a': 1, 'b': 2, 'c': 3}
+  48: d
+{'a': 1, 'b': 2, 'c': 3}
+  49: sht.range('A1').value = d
+  50: sht.range('A1').value
+'a'
+  51: sht.range('A1').expand().value
+[['a', 1.0], ['b', 2.0], ['c', 3.0]]
+  52: sht.range('A1').expand().options(dict).value
+{'a': 1.0, 'b': 2.0, 'c': 3.0}
+  53: sht.range('A6').expand().value
+[['para 1', 'a'], ['para 2', 'b'], ['para 3', 'e']]
+  54: sht.range('A6').expand().options(dict).value
+{'para 1': 'a', 'para 2': 'b', 'para 3': 'e'}
+  55: sht.range('D1').options(transpose=True).value = d
+  56: sht.range('D1').value
+'a'
+  57: sht.range('D1').expand().value
+[['a', 'b', 'c'], [1.0, 2.0, 3.0]]
+  58: sht.range('D1').expand().options(dict).value
+  59: sht.range('D1').expand().options(dict, transpose=True).value
+{'a': 1.0, 'b': 2.0, 'c': 3.0}
+  60: sht = wb.sheets.add()
+  61: import numpy as np
+  62: a = np.random.standard_normal(15)
+  63: a
+array([-0.16809639,  0.24881638,  0.41149847, -0.7368374 , -0.44870413,
+       -0.53555521, -1.27489319, -1.24881875, -0.64128157, -1.02118814,
+        0.36186753,  1.05477315, -1.49457875, -1.28994166, -1.02027179])
+  64: sht.range('A1').value = a
+  65: sht.range('A1').expand().clear()
+  66: sht.range('A1').options(transpose=True).value = a
+  67: sht.range('A1').expand().options(np.ndarray).value
+array([-0.16809639,  0.24881638,  0.41149847, -0.7368374 , -0.44870413,
+       -0.53555521, -1.27489319, -1.24881875, -0.64128157, -1.02118814,
+        0.36186753,  1.05477315, -1.49457875, -1.28994166, -1.02027179])
+  68: sht.range('A1').expand().value
+[-0.16809639226018566,
+ 0.2488163847539013,
+ 0.4114984688940545,
+ -0.7368373986525406,
+ -0.4487041260616385,
+ -0.5355552129469653,
+ -1.2748931949822648,
+ -1.2488187519713696,
+ -0.6412815672654943,
+ -1.02118814033785,
+ 0.3618675290951999,
+ 1.054773145520008,
+ -1.4945787535536519,
+ -1.2899416617407178,
+ -1.0202717855590717]
+  69: a = a.reshape((5, 3))
+  70: a
+array([[-0.16809639,  0.24881638,  0.41149847],
+       [-0.7368374 , -0.44870413, -0.53555521],
+       [-1.27489319, -1.24881875, -0.64128157],
+       [-1.02118814,  0.36186753,  1.05477315],
+       [-1.49457875, -1.28994166, -1.02027179]])
+  71: sht.range('C1').value = a
+  72: sht.range('C1').expand().value
+[[-0.16809639226018566, 0.2488163847539013, 0.4114984688940545],
+ [-0.7368373986525406, -0.4487041260616385, -0.5355552129469653],
+ [-1.2748931949822648, -1.2488187519713696, -0.6412815672654943],
+ [-1.02118814033785, 0.3618675290951999, 1.054773145520008],
+ [-1.4945787535536519, -1.2899416617407178, -1.0202717855590717]]
+  73: sht.range('C1').expand().options(np.ndarray).value
+array([[-0.16809639,  0.24881638,  0.41149847],
+       [-0.7368374 , -0.44870413, -0.53555521],
+       [-1.27489319, -1.24881875, -0.64128157],
+       [-1.02118814,  0.36186753,  1.05477315],
+       [-1.49457875, -1.28994166, -1.02027179]])
+  74: sht = wb.sheets.add()
+  75: import pandas as pd
+  76: df = pd.DataFrame(a, columns=list('abc'))
+  77: df
+          a         b         c
+0 -0.168096  0.248816  0.411498
+1 -0.736837 -0.448704 -0.535555
+2 -1.274893 -1.248819 -0.641282
+3 -1.021188  0.361868  1.054773
+4 -1.494579 -1.289942 -1.020272
+  78: sht.range('A1').value = df
+  79: sht.range('B8').options(header=False).value = df
+  80: sht.range('B8').expand().clear()
+  81: sht.range('B8').options(index=False).value = df
+  82: sht.range('F2').options(header=False).value = df
+  83: sht.range('G9').options(index=False, header=False).value = df
+  84: sht.range('A1').expand().value
+[[None, 'a', 'b', 'c'],
+ [0.0, -0.16809639226018566, 0.2488163847539013, 0.4114984688940545],
+ [1.0, -0.7368373986525406, -0.4487041260616385, -0.5355552129469653],
+ [2.0, -1.2748931949822648, -1.2488187519713696, -0.6412815672654943],
+ [3.0, -1.02118814033785, 0.3618675290951999, 1.054773145520008],
+ [4.0, -1.4945787535536519, -1.2899416617407178, -1.0202717855590717]]
+  85: sht.range('A1').expand().options(pd.DataFrame).value
+            a         b         c
+0.0 -0.168096  0.248816  0.411498
+1.0 -0.736837 -0.448704 -0.535555
+2.0 -1.274893 -1.248819 -0.641282
+3.0 -1.021188  0.361868  1.054773
+4.0 -1.494579 -1.289942 -1.020272
+  86: sht.range('B8').expand().options(pd.DataFrame).value
+                  b         c
+a                            
+-0.168096  0.248816  0.411498
+-0.736837 -0.448704 -0.535555
+-1.274893 -1.248819 -0.641282
+-1.021188  0.361868  1.054773
+-1.494579 -1.289942 -1.020272
+  87: df2 = sht.range('B8').expand().options(pd.DataFrame).value
+  88: df2.info()
+  89: sht.range('B8').expand().options(pd.DataFrame, index=False).value
+          a         b         c
+0 -0.168096  0.248816  0.411498
+1 -0.736837 -0.448704 -0.535555
+2 -1.274893 -1.248819 -0.641282
+3 -1.021188  0.361868  1.054773
+4 -1.494579 -1.289942 -1.020272
+  90: from pylab import plt
+  91: sht = wb.sheets.add()
+  92: a = np.random.standard_normal((50, 3))
+  93: a
+array([[-5.77727245e-01, -3.72398260e-04, -4.26159649e-01],
+       [ 9.17631386e-01,  4.33236055e-01, -6.56661677e-02],
+       [-2.81958584e-01,  2.69235968e-01, -9.87581286e-01],
+       [-1.00552618e+00,  3.65903993e-01, -7.70325832e-01],
+       [-5.09293582e-02,  8.21558201e-01, -4.54144217e-01],
+       [-7.60314907e-01, -4.83479938e-01,  9.26621722e-01],
+       [ 1.08247205e+00, -3.37210586e-01,  3.98450245e-01],
+       [ 7.28859340e-01,  8.02662452e-01, -4.39670648e-01],
+       [ 3.73613009e-01, -1.61984191e-01,  7.80787430e-01],
+       ...
+       [ 1.07530327e+00, -2.19373426e-01, -4.20108718e-01],
+       [ 6.03670058e-01,  3.96329866e-01, -1.68571571e-02],
+       [-2.35526223e+00, -6.19210330e-01,  4.17373799e-01],
+       [-6.39344497e-01,  7.29589546e-01,  2.14975146e-01],
+       [ 6.89825456e-01,  7.09903971e-01,  5.25838675e-01],
+       [ 8.89756745e-01,  3.71436703e-01, -8.98312553e-02],
+       [ 2.17380597e+00,  3.52845516e-01, -8.51333579e-01]])
+  94: a = np.random.standard_normal((50, 3)).cumsum(axis=0)
+  95: a
+array([[-4.05179340e-01, -7.84733495e-01, -1.09838345e+00],
+       [-1.49000179e+00, -1.39471785e+00, -9.28015413e-01],
+       [-2.68746977e-01, -1.65284158e+00,  8.44688551e-02],
+       [-7.82922383e-01, -1.67620364e-01,  1.58572828e+00],
+       [-1.53791786e+00, -1.17848429e+00,  1.32653150e+00],
+       [-2.46028206e+00, -2.32983919e+00,  1.98813527e+00],
+       ...
+       [-2.64107820e+00,  5.54053081e+00, -3.43270428e+00],
+       [-5.62263457e+00,  6.09796638e+00, -3.74434774e+00],
+       [-4.60520583e+00,  6.66993366e+00, -3.80639578e+00],
+       [-3.75231908e+00,  6.80046533e+00, -3.34598039e+00]])
+  96: a.round(4)
+array([[-4.0520e-01, -7.8470e-01, -1.0984e+00],
+       [-1.4900e+00, -1.3947e+00, -9.2800e-01],
+       [-2.6870e-01, -1.6528e+00,  8.4500e-02],
+       [-7.8290e-01, -1.6760e-01,  1.5857e+00],
+       [-1.5379e+00, -1.1785e+00,  1.3265e+00],
+       [-2.4603e+00, -2.3298e+00,  1.9881e+00],
+       [-2.1424e+00, -2.0547e+00,  2.4857e+00],
+       [-3.0666e+00, -7.8450e-01,  1.8821e+00],
+		...
+       [-5.6226e+00,  6.0980e+00, -3.7443e+00],
+       [-4.6052e+00,  6.6699e+00, -3.8064e+00],
+       [-3.7523e+00,  6.8005e+00, -3.3460e+00]])
+  97: a.round(3)
+array([[-4.050e-01, -7.850e-01, -1.098e+00],
+       [-1.490e+00, -1.395e+00, -9.280e-01],
+       [-2.690e-01, -1.653e+00,  8.400e-02],
+       [-7.830e-01, -1.680e-01,  1.586e+00],
+       [-1.538e+00, -1.178e+00,  1.327e+00],
+       [-2.460e+00, -2.330e+00,  1.988e+00],
+       [-2.142e+00, -2.055e+00,  2.486e+00],
+		...
+       [-3.543e+00,  4.467e+00, -4.032e+00],
+       [-3.343e+00,  6.154e+00, -4.934e+00],
+       [-2.641e+00,  5.541e+00, -3.433e+00],
+       [-5.623e+00,  6.098e+00, -3.744e+00],
+       [-4.605e+00,  6.670e+00, -3.806e+00],
+       [-3.752e+00,  6.800e+00, -3.346e+00]])
+  98: fig = plt.figure(); plt.plot(a)
+[<matplotlib.lines.Line2D at 0x220b1bf3390>,
+ <matplotlib.lines.Line2D at 0x220b1bf34e0>,
+ <matplotlib.lines.Line2D at 0x220b1bf3630>]
+  99: sht.pictures.add(fig)
+<Picture 'Picture 2' in <Sheet [Book1]Sheet5>>
+ 100: fig = plt.figure(); plt.plot(a); plt.grid(True)
+ 101: sht.pictures.add(fig)
+<Picture 'Picture 4' in <Sheet [Book1]Sheet5>>
+ 102: sht.pictures.add(fig, name='pyplot', update=True)
+<Picture 'pyplot' in <Sheet [Book1]Sheet5>>
+ 103: fig = plt.figure(); plt.plot(a); plt.grid(True); plt.title('updated Python plot')
+Text(0.5,1,'updated Python plot')
+ 104: sht.pictures.add(fig, name='pyplot', update=True)
+<Picture 'pyplot' in <Sheet [Book1]Sheet5>>
+ 105: plt.style.use('seaborn')
+ 106: fig = plt.figure(); plt.plot(a); plt.grid(True); plt.title('updated Python plot')
+Text(0.5,1,'updated Python plot')
+ 107: sht.pictures.add(fig, name='pyplot', update=True)
+<Picture 'pyplot' in <Sheet [Book1]Sheet5>>
+ 108: sht = wb.sheets.add()
+ 109: symbol = sht.range('A1').value
+ 110: symbol
+'AAPL.O'
+ 111: raw = pd.read_csv('http://hilpisch.com/tr_eikon_eod_data.csv', index_col=True, parse_dates=True)
+ 112: raw = pd.read_csv('http://hilpisch.com/tr_eikon_eod_data.csv', index_col=0, parse_dates=True)
+ 113: raw.info()
+ 114: raw = pd.read_csv('http://hilpisch.com/tr_eikon_eod_data.csv', index_col=0, parse_dates=True).dropna()
+ 115: raw.info()
+ 116: data = raw[symbol]
+ 117: data
+Date
+2010-01-04     30.572827
+2010-01-05     30.625684
+2010-01-06     30.138541
+2010-01-07     30.082827
+2010-01-08     30.282827
+2010-01-11     30.015684
+                 ...    
+2018-06-14    190.800000
+2018-06-15    188.840000
+2018-06-18    188.740000
+2018-06-19    185.690000
+2018-06-20    186.500000
+2018-06-21    185.460000
+2018-06-22    184.920000
+2018-06-25    182.170000
+2018-06-26    184.430000
+2018-06-27    184.160000
+2018-06-28    185.500000
+2018-06-29    185.110000
+Name: AAPL.O, Length: 2138, dtype: float64
+ 118: fig = plt.figure(); plt.plot(data)
+[<matplotlib.lines.Line2D at 0x220b05d2b38>]
+ 119: sht.pictures.add(fig, name='financial plot', update=True)
+<Picture 'financial plot' in <Sheet [Book1]Sheet6>>
+ 120: fig = plt.figure(); plt.plot(data); plt.title(symbol)
+Text(0.5,1,'AAPL.O')
+ 121: sht.pictures.add(fig, name='financial plot', update=True)
+<Picture 'financial plot' in <Sheet [Book1]Sheet6>>
+ 122:
+def update_plot():
+    symbol = sht.range('A1').value
+    data = raw[symbol]
+    fig = plt.figure()
+    plt.plot(data)
+    plt.title(symbol)
+    sht.pictures.add(fig, name='financial plot', update=True)
+ 123: update_plot()
+ 124: update_plot()
+ 125: update_plot()
+ 126: update_plot()
+ 127: %hist -n -o
+ 128: %hist -n -o -f pyexcel_01_io.txt
